@@ -1,0 +1,70 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+    <title>Your Butler - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Satisfy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/styles.css">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFF5E6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 90%;
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            font-family: 'Satisfy', cursive;
+            color: #FF6B6B;
+            font-size: 3em;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #4a4a4a;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #FF6B6B;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #FF8E8E;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Your Butler</h1>
+    <p>Your personal assistant for finding recipes and reducing food waste.</p>
+    <div class="center">
+        <a href="${pageContext.request.contextPath}/login" class="button">Login</a>
+        <a href="${pageContext.request.contextPath}/register" class="button">Register</a>
+    </div>
+    <div class="container">
+        <a href="${pageContext.request.contextPath}/ingredient" class="button">Guest Login</a>
+    </div>
+</div>
+</body>
+<html>

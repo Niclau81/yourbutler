@@ -1,0 +1,157 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: NicholasLau
+  Date: 12/8/2024
+  Time: 11:55 am
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.yourbutler.fpv6.model.User" %>
+<%@ page import="com.yourbutler.fpv6.model.Cuisine" %>
+<%@ page import="com.yourbutler.fpv6.dao.CuisineDAO" %>
+<%@ page import="java.util.List" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%
+  User user = (User) session.getAttribute("user");
+  if (user == null || !user.isAdministrator()) {
+    response.sendRedirect("login.jsp");
+    return;
+  }
+
+  CuisineDAO cuisineDAO = new CuisineDAO();
+  List<Cuisine> cuisines = cuisineDAO.getAllCuisines();
+  request.setAttribute("cuisines", cuisines);
+%>
+<html>
+<head>
+  <title>Admin Page - Add New Recipe</title>
+  <style>
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #FFF5E6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      max-width: 1500px;
+      width: 90%;
+      background-color: #FFFFFF;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-family: 'Satisfy', cursive;
+      color: #FF6B6B;
+      font-size: 2.5em;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
+    .ingredient-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 5px;
+      margin-bottom: 10px;
+    }
+    .ingredient-item {
+      display: flex;
+      align-items: center;
+    }
+    .ingredient-item label {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-top: 2px;
+    }
+    .ingredient-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    .cuisine-section {
+      flex: 0 0 60%;
+    }
+    .form-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    select {
+      width: 20%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      background-color: #FF6B6B;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    input[type="submit"]:hover {
+      background-color: #FF8E8E;
+    }
+
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="user-section">
+    <c:choose>
+      <c:when test="${empty sessionScope.user}">
+        <form class="login-form" action="${pageContext.request.contextPath}/login" method="post">
+          <input type="text" name="username" placeholder="Username" required>
+          <input type="password" name="password" placeholder="Password" required>
+          <input type="submit" value="Login">
+        </form>
+      </c:when>
+      <c:otherwise>
+        <p>Welcome, ${sessionScope.user.username}!</p>
+        <form action="${pageContext.request.contextPath}/logout" method="post">
+          <input type="submit" value="Logout" class="logout-button">
+        </form>
+      </c:otherwise>
+    </c:choose>
+  </div>
+  <c:if test="${not empty error}">
+    <p style="color: red;">${error}</p>
+  </c:if>
+  <h1>Add New Recipe</h1>
+  <form action="addRecipe" method="post" enctype="multipart/form-data">
+    <label for="recipeName">Recipe Name:</label>
+    <input type="text" id="recipeName" name="recipeName" required>
+
+    <label for="recipeImage">Recipe Image:</label>
+    <input type="file" id="recipeImage" name="recipeImage" accept="image/*" required>
+
+    <label for="recipeCuisine">Recipe Cuisine:</label>
+    <select id="recipeCuisine" name="cuisineId" required>
+      <option value="">Select a cuisine</option>
+      <c:forEach var="cuisine" items="${cuisines}">
+        <option value="${cuisine.cuisineId}">${cuisine.cuisineName}</option>
+      </c:forEach>
+    </select>
+
+    <label for="cookingTime">Cooking Time (minutes):</label>
+    <input type="number" id="cookingTime" name="cookingTime" required>
+
+    <label for="cookingSteps">Cooking Steps:</label>
+    <textarea id="cookingSteps" name="cookingSteps" rows="10" required></textarea>
+
+    <input type="submit" value="Add Recipe">
+  </form>
+</div>
+</body>
+</html>
